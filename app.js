@@ -68,6 +68,7 @@ const searchInput = document.getElementById("search-input");
 const searchBtn = document.getElementById("search-btn");
 const searchError = document.getElementById("search-error");
 
+// fetching data takes time so async make the function wait until data is updated
 const searchRecipes = async (query) => {
   const trimmed = query.trim();
   if (trimmed === "") {
@@ -87,14 +88,17 @@ const searchRecipes = async (query) => {
     const data = await response.json();
     searchBtn.textContent = "find recipes";
     if (!data.meals) {
-      searchError.textContent = `No recipe found for "${trimmed}". try something else`;
+      searchError.textContent = `try something else no result for "${trimmed}". try another search`;
       searchError.style.display = "block";
       resultsSection.style.display = "none";
+      return;
     }
+
     showResults(data.meals);
   } catch (error) {
     searchBtn.textContent = "find recipes";
-    searchError.textContent = "please check your internet connection";
+    searchError.textContent =
+      "something went wrong. check your internet connection";
     searchError.style.display = "block";
     console.error(error);
   }
