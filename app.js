@@ -113,3 +113,65 @@ searchInput.addEventListener("keydown", (event) => {
     searchRecipes(searchInput.value);
   }
 });
+
+let savedRecipes = [];
+
+const savedSection = document.getElementById("saved-section");
+const savedDivider = document.getElementById("section-divider");
+const savedGrid = document.getElementById("saved-grid");
+const savedCount = document.getElementById("saved-count");
+const savedLabel = document.getElementById("saved-label");
+
+function createSavedCard(recipe) {
+  return `
+  <div class="recipe-card">
+           <img class="card-photo"
+                src="${recipe.strMealThumb}"
+                alt="${recipe.strMeal}" />
+           <div class="card-body">
+               <div class="card-name">${recipe.strMeal}</div>
+               <div class="card-category">${recipe.strCategory}</div>
+               <div class="card-footer">
+                   <button class="btn-remove"
+                       onclick="removeRecipe('${recipe.idMeal}')">
+                       Remove
+                   </button>
+               </div>
+           </div>
+       </div>
+  `;
+}
+
+function showSaved() {
+  if (savedRecipes.length === 0) {
+    savedSection.style.display = "none";
+    savedDivider.style.display = "none";
+    savedCount.textContent = "0";
+    return;
+  }
+  savedSection.style.display = "block";
+  savedDivider.style.display = "block";
+  savedLabel.textContent = `${savedRecipes.length} found`;
+  savedCount.textContent = savedRecipes.length;
+
+  let html = "";
+  for (let recipe of savedRecipes) {
+    html += createSavedCard(recipe);
+  }
+
+  savedGrid.innerHTML = html;
+}
+
+function saveRecipe(id, name, category, thumb) {
+  const recipe = {
+    idMeal: id,
+    strMeal: name,
+    strCategory: category,
+    strMealThumb: thumb,
+  };
+
+  savedRecipes.push(recipe);
+  showSaved();
+
+  savedSection.scrollIntoView({ behavior: "smooth" });
+}
