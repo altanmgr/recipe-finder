@@ -115,7 +115,6 @@ searchInput.addEventListener("keydown", (event) => {
 });
 
 let savedRecipes = [];
-
 const savedSection = document.getElementById("saved-section");
 const savedDivider = document.getElementById("section-divider");
 const savedGrid = document.getElementById("saved-grid");
@@ -149,16 +148,16 @@ function showSaved() {
     savedCount.textContent = "0";
     return;
   }
+
   savedSection.style.display = "block";
   savedDivider.style.display = "block";
-  savedLabel.textContent = `${savedRecipes.length} found`;
   savedCount.textContent = savedRecipes.length;
+  savedLabel.textContent = `${savedRecipes.length} saved`;
 
   let html = "";
   for (let recipe of savedRecipes) {
     html += createSavedCard(recipe);
   }
-
   savedGrid.innerHTML = html;
 }
 
@@ -172,6 +171,14 @@ function saveRecipe(id, name, category, thumb) {
 
   savedRecipes.push(recipe);
   showSaved();
-
   savedSection.scrollIntoView({ behavior: "smooth" });
 }
+
+function removeRecipe(id) {
+  const position = savedRecipes.findIndex((recipe) => recipe.idMeal === id);
+  if (position !== -1) {
+    savedRecipes.splice(position, 1);
+  }
+  showSaved();
+}
+
